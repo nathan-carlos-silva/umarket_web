@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}UMarket — Mercado Autônomo{% endblock %}
+
+{% block content %}
+<div class="hero p-5 mb-4">
+    <span class="badge bg-light text-primary mb-2">Mercado Autônomo</span>
+    <h1 class="display-6 fw-bold">Compre quando quiser, sem filas e sem espera.</h1>
+    <p class="lead">O UMarket é o mercado autônomo que funciona 24 horas. Escolha os produtos, leve para casa e pague tudo pelo aplicativo.</p>
+    <a href="{{ url_for('cliente.catalogo') }}" class="btn btn-light btn-lg">Ver catálogo →</a>
+    {% if not current_user.is_authenticated %}
+    <a href="{{ url_for('auth.cadastro') }}" class="btn btn-outline-light btn-lg">Criar conta</a>
+    {% endif %}
+</div>
+
+{% if destaques %}
+<h2 class="h4 mb-3">Produtos em destaque</h2>
+<div class="row g-3">
+    {% for produto in destaques %}
+    <div class="col-6 col-md-3">
+        <div class="card h-100 produto-card">
+            {% if produto.imagem_url %}
+            <img src="{{ produto.imagem_url }}" alt="{{ produto.nome }}" class="produto-imagem mt-3">
+            {% else %}
+            <div class="produto-placeholder mx-3 mt-3" style="background-color: {{ produto.cor_categoria }}22; color: {{ produto.cor_categoria }};">
+                {{ produto.iniciais }}
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <span class="badge bg-secondary mb-2">{{ produto.classificacao or "—" }}</span>
+                <h3 class="h6">{{ produto.nome }}</h3>
+                <p class="fw-bold text-primary">R$ {{ "%.2f"|format(produto.preco) }}</p>
+                <a href="{{ url_for('cliente.produto_detalhe', id_produto=produto.id) }}" class="btn btn-sm btn-outline-dark w-100">Ver produto</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

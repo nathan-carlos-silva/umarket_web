@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Produtos — Admin UMarket{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Gerenciar Produtos</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="h6">Novo produto</h2>
+        <form method="POST" action="{{ url_for('admin.produto_criar') }}" class="row g-2">
+            <div class="col-md-3"><input type="text" name="nome" class="form-control" placeholder="Nome" required></div>
+            <div class="col-md-2"><input type="text" name="classificacao" class="form-control" placeholder="Categoria"></div>
+            <div class="col-md-2"><input type="number" step="0.01" name="preco" class="form-control" placeholder="Preço" required></div>
+            <div class="col-md-3"><input type="url" name="imagem_url" class="form-control" placeholder="URL da imagem (opcional)"></div>
+            <div class="col-md-2"><button type="submit" class="btn btn-dark w-100">Cadastrar</button></div>
+        </form>
+    </div>
+</div>
+
+<table class="table align-middle">
+    <thead><tr><th>ID</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Imagem (URL)</th><th>Estoque total</th><th></th></tr></thead>
+    <tbody>
+        {% for produto in produtos %}
+        <tr>
+            <td>
+                <form id="form-produto-{{ produto.id }}" method="POST" action="{{ url_for('admin.produto_editar', id_produto=produto.id) }}"></form>
+                {{ produto.id }}
+            </td>
+            <td><input form="form-produto-{{ produto.id }}" type="text" name="nome" value="{{ produto.nome }}" class="form-control form-control-sm"></td>
+            <td><input form="form-produto-{{ produto.id }}" type="text" name="classificacao" value="{{ produto.classificacao or '' }}" class="form-control form-control-sm"></td>
+            <td><input form="form-produto-{{ produto.id }}" type="number" step="0.01" name="preco" value="{{ produto.preco }}" class="form-control form-control-sm"></td>
+            <td><input form="form-produto-{{ produto.id }}" type="url" name="imagem_url" value="{{ produto.imagem_url or '' }}" placeholder="https://..." class="form-control form-control-sm"></td>
+            <td>{{ produto.qtd_total_estoque }}</td>
+            <td class="text-nowrap">
+                <button form="form-produto-{{ produto.id }}" type="submit" class="btn btn-sm btn-outline-primary">Salvar</button>
+                <form method="POST" action="{{ url_for('admin.produto_excluir', id_produto=produto.id) }}"
+                      class="d-inline" onsubmit="return confirm('Excluir este produto?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

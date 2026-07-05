@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Pedidos — Admin UMarket{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Consultar Pedidos</h1>
+
+<div class="mb-3 d-flex flex-wrap gap-2">
+    <a href="{{ url_for('admin.pedidos') }}" class="btn btn-sm {{ 'btn-dark' if not id_pdv_filtro else 'btn-outline-dark' }}">Todos os PDVs</a>
+    {% for pdv in pdvs %}
+    <a href="{{ url_for('admin.pedidos', id_pdv=pdv.id) }}" class="btn btn-sm {{ 'btn-dark' if id_pdv_filtro == pdv.id else 'btn-outline-dark' }}">{{ pdv.nome }}</a>
+    {% endfor %}
+</div>
+
+<table class="table align-middle">
+    <thead><tr><th>#</th><th>Data</th><th>Cliente</th><th>PDV</th><th>Pagamento</th><th>Valor</th></tr></thead>
+    <tbody>
+        {% for venda in vendas %}
+        <tr>
+            <td>{{ venda.id }}</td>
+            <td>{{ venda.data.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ venda.usuario.nome }}</td>
+            <td>{{ venda.pdv.nome }}</td>
+            <td>{{ venda.forma_pagamento }}</td>
+            <td>R$ {{ "%.2f"|format(venda.valor) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

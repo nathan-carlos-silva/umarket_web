@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}UMarket{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{{ url_for('cliente.index') }}">🛒 UMarket</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('cliente.index') }}">Início</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('cliente.catalogo') }}">Catálogo</a></li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('cliente.historico') }}">Meus Pedidos</a></li>
+                {% endif %}
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard') }}">Admin</a></li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('cliente.carrinho') }}">
+                        🛒 Carrinho
+                        {% if qtd_itens_carrinho %}
+                        <span class="badge bg-primary rounded-pill">{{ qtd_itens_carrinho }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('cliente.perfil') }}">{{ current_user.nome.split(' ')[0] }}</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Sair</a></li>
+                {% else %}
+                <li class="nav-item"><a class="btn btn-light btn-sm ms-2" href="{{ url_for('auth.login') }}">Entrar</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-3">
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% if mensagens %}
+            {% for categoria, mensagem in mensagens %}
+            <div class="alert alert-{{ categoria }} alert-dismissible fade show" role="alert">
+                {{ mensagem }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<main class="container mb-5">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="bg-dark text-light py-4 mt-auto">
+    <div class="container text-center">
+        <small>&copy; 2026 UMarket — Projeto acadêmico UDESC — Desenvolvimento Web</small>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

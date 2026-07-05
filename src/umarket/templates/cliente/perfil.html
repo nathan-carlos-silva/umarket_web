@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Meu Perfil — UMarket{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Meu Perfil</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form method="POST" action="{{ url_for('cliente.perfil') }}">
+            <div class="mb-3">
+                <label class="form-label">Nome completo</label>
+                <input type="text" name="nome" class="form-control" value="{{ current_user.nome }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">E-mail</label>
+                <input type="email" class="form-control" value="{{ current_user.email }}" disabled>
+                <div class="form-text">O e-mail não pode ser alterado.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">CPF</label>
+                <input type="text" class="form-control" value="{{ current_user.cpf }}" disabled>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nova senha</label>
+                <input type="password" name="nova_senha" class="form-control" placeholder="Deixe em branco para manter a atual">
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Salvar alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

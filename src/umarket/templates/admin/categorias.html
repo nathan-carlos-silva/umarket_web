@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Categorias — Admin UMarket{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Gerenciar Categorias</h1>
+<p class="text-muted">
+    Categorias correspondem ao campo "classificação" dos produtos. Renomear uma categoria
+    atualiza todos os produtos que a utilizam.
+</p>
+
+<table class="table align-middle">
+    <thead><tr><th>Categoria</th><th>Produtos</th><th>Renomear para</th><th></th></tr></thead>
+    <tbody>
+        {% for c in categorias %}
+        <tr>
+            <td>{{ c.nome }}</td>
+            <td>{{ c.qtd_produtos }}</td>
+            <td colspan="2">
+                <form method="POST" action="{{ url_for('admin.categoria_renomear') }}" class="d-flex gap-2">
+                    <input type="hidden" name="nome_atual" value="{{ c.nome }}">
+                    <input type="text" name="nome_novo" class="form-control form-control-sm" placeholder="Novo nome" required>
+                    <button type="submit" class="btn btn-sm btn-outline-primary text-nowrap">Renomear</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

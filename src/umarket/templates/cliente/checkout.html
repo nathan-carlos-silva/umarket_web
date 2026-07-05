@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Finalizar Compra — UMarket{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Finalizar Compra</h1>
+
+<div class="row">
+    <div class="col-lg-7">
+        <form method="POST" action="{{ url_for('cliente.checkout') }}">
+            <div class="mb-3">
+                <label class="form-label">Ponto de venda (retirada)</label>
+                <select name="id_pdv" class="form-select" required>
+                    <option value="" disabled selected>Selecione um PDV</option>
+                    {% for pdv in pdvs %}
+                    <option value="{{ pdv.id }}">{{ pdv.nome }} — {{ pdv.cidade }}/{{ pdv.estado }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Forma de pagamento</label>
+                <select name="forma_pagamento" class="form-select" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="PIX">PIX</option>
+                    <option value="Crédito">Cartão de Crédito</option>
+                    <option value="Débito">Cartão de Débito</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Confirmar Pedido</button>
+        </form>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="h5">Resumo</h2>
+                <ul class="list-unstyled">
+                    {% for item in itens %}
+                    <li class="d-flex justify-content-between">
+                        <span>{{ item.produto.nome }} x{{ item.quantidade }}</span>
+                        <span>R$ {{ "%.2f"|format(item.subtotal) }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <strong>Total</strong>
+                    <strong>R$ {{ "%.2f"|format(total) }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

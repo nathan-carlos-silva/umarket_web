@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Admin UMarket{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Dashboard</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card text-center"><div class="card-body">
+            <p class="text-muted mb-1">Produtos</p>
+            <h2>{{ total_produtos }}</h2>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center"><div class="card-body">
+            <p class="text-muted mb-1">Usuários</p>
+            <h2>{{ total_usuarios }}</h2>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center"><div class="card-body">
+            <p class="text-muted mb-1">Vendas</p>
+            <h2>{{ total_vendas }}</h2>
+        </div></div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center"><div class="card-body">
+            <p class="text-muted mb-1">Faturamento</p>
+            <h2>R$ {{ "%.2f"|format(faturamento_total) }}</h2>
+        </div></div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3"><a href="{{ url_for('admin.produtos') }}" class="btn btn-outline-dark w-100 py-3">📦 Produtos</a></div>
+    <div class="col-md-3"><a href="{{ url_for('admin.estoque') }}" class="btn btn-outline-dark w-100 py-3">🏬 Estoque</a></div>
+    <div class="col-md-3"><a href="{{ url_for('admin.categorias') }}" class="btn btn-outline-dark w-100 py-3">🏷️ Categorias</a></div>
+    <div class="col-md-3"><a href="{{ url_for('admin.usuarios') }}" class="btn btn-outline-dark w-100 py-3">👥 Usuários</a></div>
+    <div class="col-md-3"><a href="{{ url_for('admin.pedidos') }}" class="btn btn-outline-dark w-100 py-3">🧾 Pedidos</a></div>
+</div>
+
+<h2 class="h5">Últimas vendas</h2>
+<table class="table table-sm">
+    <thead><tr><th>#</th><th>Data</th><th>Cliente</th><th>PDV</th><th>Valor</th></tr></thead>
+    <tbody>
+        {% for venda in ultimas_vendas %}
+        <tr>
+            <td>{{ venda.id }}</td>
+            <td>{{ venda.data.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ venda.usuario.nome }}</td>
+            <td>{{ venda.pdv.nome }}</td>
+            <td>R$ {{ "%.2f"|format(venda.valor) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

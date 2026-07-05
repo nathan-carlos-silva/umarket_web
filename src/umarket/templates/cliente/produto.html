@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ produto.nome }} — UMarket{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('cliente.catalogo') }}" class="d-inline-block mb-3">← Voltar ao catálogo</a>
+
+<div class="row">
+    <div class="col-md-5">
+        {% if produto.imagem_url %}
+        <img src="{{ produto.imagem_url }}" alt="{{ produto.nome }}" class="img-fluid rounded" style="height:280px; object-fit:contain; width:100%;">
+        {% else %}
+        <div class="produto-placeholder rounded" style="height:280px; font-size:4rem; background-color: {{ produto.cor_categoria }}22; color: {{ produto.cor_categoria }};">
+            {{ produto.iniciais }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-7">
+        <span class="badge bg-secondary mb-2">{{ produto.classificacao or "—" }}</span>
+        <h1 class="h3">{{ produto.nome }}</h1>
+        <p class="display-6 text-primary fw-bold">R$ {{ "%.2f"|format(produto.preco) }}</p>
+        <p class="text-muted">
+            Disponibilidade total em estoque (todos os PDVs): <strong>{{ produto.qtd_total_estoque }}</strong> unidade(s)
+        </p>
+
+        <form method="POST" action="{{ url_for('cliente.carrinho_adicionar', id_produto=produto.id) }}" class="row g-2 mt-3">
+            <div class="col-4 col-md-3">
+                <input type="number" name="quantidade" class="form-control" value="1" min="1">
+            </div>
+            <div class="col-8 col-md-5">
+                <button type="submit" class="btn btn-dark w-100">🛒 Adicionar ao Carrinho</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Catálogo — UMarket{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-1">Catálogo de Produtos</h1>
+<p class="text-muted">{{ produtos|length }} produto(s) disponíveis</p>
+
+<form method="GET" class="row g-2 mb-3">
+    <div class="col-md-8">
+        <input type="text" name="q" class="form-control" placeholder="Buscar produtos..." value="{{ busca }}">
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-outline-dark w-100" type="submit">Buscar</button>
+    </div>
+</form>
+
+<div class="mb-4 d-flex flex-wrap gap-2">
+    <a href="{{ url_for('cliente.catalogo', q=busca) }}"
+       class="btn btn-sm {{ 'btn-dark' if not classificacao_atual else 'btn-outline-dark' }}">Todos</a>
+    {% for c in classificacoes %}
+    <a href="{{ url_for('cliente.catalogo', q=busca, classificacao=c) }}"
+       class="btn btn-sm {{ 'btn-dark' if classificacao_atual == c else 'btn-outline-dark' }}">{{ c }}</a>
+    {% endfor %}
+</div>
+
+<div class="row g-3">
+    {% for produto in produtos %}
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="card h-100 produto-card">
+            {% if produto.imagem_url %}
+            <img src="{{ produto.imagem_url }}" alt="{{ produto.nome }}" class="produto-imagem mt-3">
+            {% else %}
+            <div class="produto-placeholder mx-3 mt-3" style="background-color: {{ produto.cor_categoria }}22; color: {{ produto.cor_categoria }};">
+                {{ produto.iniciais }}
+            </div>
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+                <span class="badge bg-secondary mb-2 align-self-start">{{ produto.classificacao or "—" }}</span>
+                <h3 class="h6">{{ produto.nome }}</h3>
+                <p class="fw-bold text-primary mb-2">R$ {{ "%.2f"|format(produto.preco) }}</p>
+                <a href="{{ url_for('cliente.produto_detalhe', id_produto=produto.id) }}" class="btn btn-sm btn-outline-dark mb-2">Ver detalhes</a>
+                <form method="POST" action="{{ url_for('cliente.carrinho_adicionar', id_produto=produto.id) }}" class="mt-auto">
+                    <input type="hidden" name="quantidade" value="1">
+                    <button type="submit" class="btn btn-sm btn-dark w-100">🛒 Adicionar ao Carrinho</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p class="text-muted">Nenhum produto encontrado.</p>
+    {% endfor %}
+</div>
+{% endblock %}

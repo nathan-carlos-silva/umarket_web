@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Entrar — UMarket{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <h1 class="h3 mb-1">Bem-vindo de volta ao UMarket.</h1>
+        <p class="text-muted mb-4">Acesse sua conta para acompanhar suas compras.</p>
+
+        <form method="POST" action="{{ url_for('auth.login') }}">
+            <div class="mb-3">
+                <label class="form-label">E-mail</label>
+                <input type="email" name="email" class="form-control" placeholder="voce@email.com" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Senha</label>
+                <input type="password" name="senha" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Entrar</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Não tem uma conta? <a href="{{ url_for('auth.cadastro') }}">Cadastre-se</a>
+        </p>
+        <p class="text-center">
+            <a href="{{ url_for('cliente.index') }}">← Voltar para a loja</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

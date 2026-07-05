@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Carrinho — UMarket{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Carrinho de Compras</h1>
+
+{% if itens %}
+<div class="row">
+    <div class="col-lg-8">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor unit.</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in itens %}
+                <tr>
+                    <td>
+                        <strong>{{ item.produto.nome }}</strong><br>
+                        <small class="text-muted">{{ item.produto.classificacao or "—" }}</small>
+                    </td>
+                    <td style="max-width:120px;">
+                        <form method="POST" action="{{ url_for('cliente.carrinho_atualizar', id_produto=item.produto.id) }}" class="d-flex">
+                            <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1" class="form-control form-control-sm" onchange="this.form.submit()">
+                        </form>
+                    </td>
+                    <td>R$ {{ "%.2f"|format(item.produto.preco) }}</td>
+                    <td>R$ {{ "%.2f"|format(item.subtotal) }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('cliente.carrinho_remover', id_produto=item.produto.id) }}">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">🗑</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('cliente.catalogo') }}">← Continuar comprando</a>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="h5">Resumo do pedido</h2>
+                <div class="d-flex justify-content-between">
+                    <span>Total</span>
+                    <strong>R$ {{ "%.2f"|format(total) }}</strong>
+                </div>
+                <a href="{{ url_for('cliente.checkout') }}" class="btn btn-dark w-100 mt-3">Finalizar Compra</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<p class="text-muted">Seu carrinho está vazio.</p>
+<a href="{{ url_for('cliente.catalogo') }}" class="btn btn-dark">Ver catálogo</a>
+{% endif %}
+{% endblock %}

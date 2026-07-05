@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Estoque — Admin UMarket{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">Controle de Estoque</h1>
+
+<div class="mb-3 d-flex flex-wrap gap-2">
+    <a href="{{ url_for('admin.estoque') }}" class="btn btn-sm {{ 'btn-dark' if not id_pdv_filtro else 'btn-outline-dark' }}">Todos os PDVs</a>
+    {% for pdv in pdvs %}
+    <a href="{{ url_for('admin.estoque', id_pdv=pdv.id) }}" class="btn btn-sm {{ 'btn-dark' if id_pdv_filtro == pdv.id else 'btn-outline-dark' }}">{{ pdv.nome }}</a>
+    {% endfor %}
+</div>
+
+<table class="table align-middle">
+    <thead><tr><th>PDV</th><th>Produto</th><th>Qtd. atual</th><th>Capacidade</th><th></th></tr></thead>
+    <tbody>
+        {% for e in estoques %}
+        <tr>
+            <td>{{ e.pdv.nome }}</td>
+            <td>{{ e.produto.nome }}</td>
+            <form id="form-estoque-{{ e.id_pdv }}-{{ e.id_produto }}" method="POST"
+                  action="{{ url_for('admin.estoque_atualizar', id_pdv=e.id_pdv, id_produto=e.id_produto) }}"></form>
+            <td style="max-width:110px;">
+                <input form="form-estoque-{{ e.id_pdv }}-{{ e.id_produto }}" type="number" name="qtd_atual" value="{{ e.qtd_atual }}" min="0" class="form-control form-control-sm">
+            </td>
+            <td style="max-width:110px;">
+                <input form="form-estoque-{{ e.id_pdv }}-{{ e.id_produto }}" type="number" name="capacidade" value="{{ e.capacidade }}" min="1" class="form-control form-control-sm">
+            </td>
+            <td>
+                <button form="form-estoque-{{ e.id_pdv }}-{{ e.id_produto }}" type="submit" class="btn btn-sm btn-outline-primary">Salvar</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

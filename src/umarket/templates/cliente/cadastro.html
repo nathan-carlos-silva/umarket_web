@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Criar conta — UMarket{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h1 class="h3 mb-1">Criar sua conta</h1>
+        <p class="text-muted mb-4">Leva menos de um minuto.</p>
+
+        <form method="POST" action="{{ url_for('auth.cadastro') }}">
+            <div class="mb-3">
+                <label class="form-label">Nome completo</label>
+                <input type="text" name="nome" class="form-control" value="{{ form.get('nome', '') }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">E-mail</label>
+                <input type="email" name="email" class="form-control" value="{{ form.get('email', '') }}" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">CPF (somente números)</label>
+                    <input type="text" name="cpf" class="form-control" maxlength="11" value="{{ form.get('cpf', '') }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Data de nascimento</label>
+                    <input type="date" name="data_nasc" class="form-control" value="{{ form.get('data_nasc', '') }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Senha</label>
+                    <input type="password" name="senha" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Confirmar senha</label>
+                    <input type="password" name="confirmar_senha" class="form-control" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Criar conta</button>
+        </form>
+
+        <p class="text-center mt-3">
+            Já tem uma conta? <a href="{{ url_for('auth.login') }}">Entrar</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
